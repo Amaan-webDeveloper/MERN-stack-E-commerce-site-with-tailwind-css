@@ -9,7 +9,7 @@ const CreateProducts = () => {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [productImages, setProductImages] = useState(null);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('Shoes');
   const [stock, setStock] = useState('');
 
   const navigate = useNavigate()
@@ -23,11 +23,9 @@ const CreateProducts = () => {
   const [categoryArray, setCategoryArray] = useState([])
 
 
-console.log(productImages)
+
 
   useEffect(() => {
-    
-
     (async () => {
       const res = await ServiceObj.getAllCategories()
       setCategoryArray(res.data.data)
@@ -108,16 +106,16 @@ console.log(productImages)
     });
 
     try {
-      // name, price, description, productImages, category, stock
+      
       setloading(true)
-      // console.log(name, price, description, productImages, category, stock)
+      
       const newProduct = await ServiceObj.createProduct(formData)
 
       if (newProduct) {
-        // console.log(newProduct)
-        navigate("/")
+        
+        navigate("/admin/dash/manage-products")
       }
-      // console.log(loginUser)
+      
       setmsg(null)
       setloading(false)
 
@@ -137,8 +135,8 @@ console.log(productImages)
   // console.log(productImages)
 
   return (
-    <div className='flex flex-col items-center justify-center p-10'>
-      <form onSubmit={(e) => handleSubmit(e)} className="max-w-sm  min-w-64 ">
+    <div className='pt-16 w-full flex flex-cal items-center justify-center'>
+      <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col w-80 p-2 shadow-lg ">
 
 
         <div className="mb-2">

@@ -189,20 +189,20 @@ const UpdateProduct = () => {
     // console.log(productImages)
 
     return (
-        <div className='flex flex-col items-center justify-center p-10'>
-            <form onSubmit={(e) => handleSubmit(e)} className="max-w-sm  min-w-64 ">
+        <div className='pt-16 w-full flex flex-cal items-center justify-center'>
+            <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col w-80 p-2 shadow-lg ">
 
 
-                <div className="mb-2">
+                <div className="mb-1">
                     <label htmlFor="name" className="block">Name:</label>
                     <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)}
                         className="w-full border border-gray-300 rounded-md px-1 py-1" />
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                     <label htmlFor="price" className="block">Price:</label>
                     <input type="number" id="price" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full border border-gray-300 rounded-md px-1 py-1" />
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                     <label htmlFor="description" className="block">Description:</label>
                     <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full border border-gray-300 rounded-md px-1 py-1"></textarea>
                 </div>
@@ -213,13 +213,13 @@ const UpdateProduct = () => {
                     })}
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-2">
                     {productImages ? <p>{productImages?.length} images selected</p> : <p>no images are selected</p>}
                     <label htmlFor="productImages" className="block">Product Images:</label>
                     <input type="file" id="productImages" onChange={async (e) => handleChangeImages(e)
                     } multiple className="w-full border border-gray-300 rounded-md px-1 py-1" />
                 </div>
-                <div className="mb-4 flex items-center gap-3 ">
+                <div className="mb-2 flex items-center gap-3 ">
                     <label htmlFor="category" className="block">Category:</label>
                     {/* <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-md px-1 py-1" /> */}
 
@@ -230,7 +230,7 @@ const UpdateProduct = () => {
                     </select>
 
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                     <label htmlFor="stock" className="block">Stock:</label>
                     <input type="number" id="stock" value={stock} onChange={(e) => setStock(e.target.value)} className="w-full border border-gray-300 rounded-md px-1 py-1" />
                 </div>
@@ -242,7 +242,7 @@ const UpdateProduct = () => {
                 
 
             </form>
-            <button type='button' className='mt-2 p-2 bg-red-500 rounded-lg text-white' onClick={(e)=>{
+            <button type='button' className='absolute top-16 right-2 mt-2 p-2 bg-red-500 rounded-lg text-white' onClick={(e)=>{
                 handleDelete(e)
             }}>Delete The product?</button>
             <div className="">

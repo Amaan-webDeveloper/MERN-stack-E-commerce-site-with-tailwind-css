@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// name, price, description, productImages, category, stock
+
 export class Service {
     async createProduct(formData) {
         try {
@@ -20,9 +20,10 @@ export class Service {
     }
     
 
-    async getAllProducts(){
+    async getAllProducts({page,searchQ,sort,priceRange,sCategory}){
         try {
-            const res = await axios.post("/api/v1/product/getallproducts")
+            console.log(searchQ,sort,priceRange,sCategory)
+            const res = await axios.post(`/api/v1/product/getallproducts?searchQ=${searchQ}&sort=${sort}&priceRange=${priceRange}&sCategory=${sCategory}&page=${page}`)
         
             return res;
         } catch (error) {
@@ -36,7 +37,7 @@ export class Service {
 
     async getProduct(id){
         try {
-            const res = await axios.post("/api/v1/product/getproduct",{id})
+            const res = await axios.post(`/api/v1/product/getproduct/${id}`)
 
             return res
         } catch (error) {

@@ -64,17 +64,54 @@ const createProduct = asyncHandler(async (req, res) => {
 
 
 const getAllProduct = asyncHandler(async (req, res) => {
-    const products = await Product.find()
+    const { searchQ, sort, priceRange, sCategory } = req.query;
+
+    const page = Number(req.query.page) || 1;
+    const limit = 6;
+    const skip = (page - 1) * limit;
+    console.log(req.query)
+
+    const categoryName = await Category.findOne({ name: sCategory })
+    console.log(categoryName?._id)
+    // console.log(categoryName[0])
+
+
+    const productQuery = {}
+
+    if (searchQ) productQuery.name = {
+            $regex: searchQ, $options: "i"
+        }
+    
+    if (priceRange) productQuery.price = {
+            $lte: Number(priceRange)
+        }
+    
+    if (sCategory) productQuery.category = categoryName?._id
+    
+    // two time await optimization
+    const [products,allProducts] = await Promise.all([
+        Product.find(productQuery).sort(sort && {price:sort === "asc"? 1 :-1}).limit(limit).skip(skip),
+        Product.find(productQuery)
+    ])
+    // const allProducts = await Product.find(productQuery)
+    // const products = await Product.find(productQuery).sort(sort && {price:sort === "asc"? 1 :-1}).limit(limit).skip(skip)
+
+
+    const totalPages = Math.ceil(allProducts.length / limit);
+    
+
     if (!products) {
 
         throw new ApiError(500, "server error: faild to get all the products")
     }
 
-    return res.status(200).json(new ApiResponse(200, products, "Products fetched successfully"))
+    return res.status(200).json(new ApiResponse(200,products, "Products fetched successfully",totalPages))
 })
 
 const getProduct = asyncHandler(async (req, res) => {
-    const { id } = req.body;
+
+
+    const { id } = req.params;
 
     if (!id) {
         throw new ApiError(401, "product id not found")
@@ -188,7 +225,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     if (!deleteProduct) {
         throw new ApiError(501, "can't delete the product, error")
     }
-    
+
     return res.status(201).json(new ApiResponse(201, "product deleted successfully"))
 
 })

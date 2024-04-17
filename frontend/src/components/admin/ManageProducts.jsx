@@ -27,11 +27,14 @@ const ManageProducts = () => {
         {products.map((product)=>(
             
             <div key={product._id} className='items-center shadow-lg flex justify-evenly gap-4 pt-4'>
+                <Link to={`/product/${product._id}`}>
                 <img src={product.productImages[0]} className='h-16' alt="" />
+                </Link>
+                
                 <p>{product.name}</p>
                 <p>{product.price}</p>
                 <p>{product.stock}</p>
-                <Link to={`/admin/updateproduct/${product._id}`}>Edit</Link>
+                <Link to={`/admin/dash/updateproduct/${product._id}`}>Edit</Link>
             </div>
         ))}
     </div>

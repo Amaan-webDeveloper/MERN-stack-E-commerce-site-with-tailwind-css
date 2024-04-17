@@ -10,7 +10,7 @@ router.route("/getallproducts").post(getAllProduct)
 
 
 
-router.route("/getproduct").post(getProduct)
+router.route("/getproduct/:id").post(getProduct)
 
 router.route("/admin/deleteproduct").post(deleteProduct)
 

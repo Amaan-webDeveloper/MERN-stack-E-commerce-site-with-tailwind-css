@@ -16,6 +16,7 @@ import AuthLayout from "./auth/AuthLayout.jsx"
 import DetailedProductCard from "./utils/DetailedProductCard.jsx"
 import ProductCard from "./utils/ProductCard.jsx"
 import UpdateProduct from "./admin/UpdateProduct.jsx";
+import CreateCategory from "./admin/CreateCategory.jsx";
 // import AuthLayout from "./auth/AuthLayout";
 
-export {Login,Register,Home,NavBar,LogoutBtn,ImageSlider, Orders,Account,Cart,Container,AdminDash,CreateProducts,ManageProducts,UserOreders,AuthLayout,DetailedProductCard,ProductCard,UpdateProduct}
+export {Login,Register,Home,NavBar,LogoutBtn,ImageSlider, Orders,Account,Cart,Container,AdminDash,CreateProducts,ManageProducts,UserOreders,AuthLayout,DetailedProductCard,ProductCard,UpdateProduct,CreateCategory}

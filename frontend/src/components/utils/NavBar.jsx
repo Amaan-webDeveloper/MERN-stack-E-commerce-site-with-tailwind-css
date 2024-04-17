@@ -7,7 +7,7 @@ const NavBar = () => {
 
     const authStatus = useSelector(state => state.auth.status)
     const isAdmin = useSelector(state => state.auth.isAdmin)
-    
+
     const navigate = useNavigate()
     const links = [
         // {
@@ -44,11 +44,14 @@ const NavBar = () => {
     ];
     return (
         <div>
-            <nav className='absolute top-0 w-screen border-b-2 border-zinc-300 box-border h-16 flex items-center justify-between gap-7'>
+            <nav className='absolute z-50 top-0 w-screen border-b-2 border-zinc-300 box-border h-16 flex items-center justify-between gap-7'>
                 <div className='mr-auto'><img className='h-20' src={"/logo/pngwing.com.png"} alt={"logo"} /></div>
                 {links.map((link) => (
                     <NavLink to={link.routs} key={link.label}
-                        className={"flex items-center justify-center text-xs"}
+                        className={({ isActive }) =>
+                            isActive ? "flex items-center  justify-center text-xs shadow-lg p-1 rounded-lg" : "flex items-center justify-center p-1 text-xs"}
+
+
                     >
                         <img className='h-6' src={link.imgurl} alt={link.label} />
                         <p>{link.label}</p>
@@ -57,7 +60,8 @@ const NavBar = () => {
                 {isAdmin ? (
 
 
-                    <Link className='flex items-center justify-center text-xs' to={"/admin/dash"}><img src={"/svg/admin.svg"} alt="logout" />Admin</Link>
+                    <NavLink className={({ isActive }) =>
+                    isActive ? "flex items-center  justify-center text-xs shadow-lg p-1 rounded-lg" : "flex items-center justify-center p-1 text-xs"} to={"/admin/dash/manage-products"}><img src={"/svg/admin.svg"} alt="logout" />Admin</NavLink>
 
 
                 ) : null}
