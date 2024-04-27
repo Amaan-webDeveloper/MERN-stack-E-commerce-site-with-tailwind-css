@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams,useNavigate } from 'react-router-dom'
 import ServiceObj from '../../Api/backendConfig'
 import ImageSlider from "./ImageSlider"
+import { useSelector } from 'react-redux'
 
 const DetailedProductCard = () => {
   const { id } = useParams()
   const [product, setProduct] = useState([])
+  const authStatus = useSelector(state => state.auth.status)
+  const userData = useSelector(state => state.auth.userData)
+  const navigate = useNavigate();
 
-
-  const [quantity, setQuantity] = useState(1)
-
+  const [isAddedToCart, setisAddedToCart] = useState(false)
+  
+  // console.log(userData)
+  
   
   useEffect(() => {
     (async () => {
@@ -18,6 +23,35 @@ const DetailedProductCard = () => {
     })()
   }, [id])
 
+ 
+  
+
+  const handleAddToCart = async(e)=>{
+    if (!authStatus) {
+      return navigate("/login")
+    }
+
+    if (userData?.cart.includes(id)) {
+      console.log(id,'already')
+      return;
+    }
+
+    const res = await ServiceObj.addToCart(id)
+    if (res) {
+      console.log(res)
+      
+    }
+    setisAddedToCart(true)
+  }
+
+  useEffect(() => {
+    (async()=>{
+      if (userData?.cart.includes(id)) {
+        setisAddedToCart(true)
+        console.log(isAddedToCart)
+      }
+    })()
+  }, [userData,handleAddToCart])
   
 
   return (
@@ -42,7 +76,7 @@ const DetailedProductCard = () => {
           <p>{product.description}</p>
         </div>
 
-        <div className='mt-6'>
+        {/* <div className='mt-6'>
           <div>Quantity</div>
           <div className='flex gap-1'>
 
@@ -50,10 +84,11 @@ const DetailedProductCard = () => {
             <div className='text-center px-2 border-2 border-black'>{quantity}</div>
             <button type='button' onClick={()=>{setQuantity(quantity + 1)}} className='text-center px-2 border-2 text-lg border-black'>+</button>
           </div>
-        </div>
+        </div> */}
 
         <div className='mt-6 flex-cal flex gap-2 my-16'>
-          <button className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>ADD TO CART</button>
+
+          {!isAddedToCart?<button onClick={(e=>{handleAddToCart(e)})} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>ADD TO CART</button>:<button onClick={e=>{navigate("/cart")}} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>GO TO CART</button>}
 
           <button className='border-2 text-white bg-black px-2 py-2 text-lg border-black rounded-lg'>BUY IT NOW</button>
         </div>

@@ -4,6 +4,7 @@ const initialState = {
   isAdmin:false,
   status: false,
   userData: null,
+  orderItems:null,
 };
 
 const authSlice = createSlice({
@@ -19,6 +20,9 @@ const authSlice = createSlice({
       state.status = true;
       state.userData = action.payload;
     },
+    orderItems: (state, action) => {
+      state.orderItems=action.payload;
+    },
     logout: (state) => {
       state.isAdmin=false;
       state.status = false;
@@ -27,6 +31,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout,adminLogin } = authSlice.actions;
+export const { login, logout,adminLogin,orderItems } = authSlice.actions;
 
 export default authSlice.reducer;

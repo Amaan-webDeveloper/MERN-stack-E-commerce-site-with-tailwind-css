@@ -1,7 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import NodeCache from "node-cache";
 
+export const cache = new NodeCache()
 const app = express()
 
 // app.use(cors())

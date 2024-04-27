@@ -9,7 +9,7 @@ const ManageProducts = () => {
 
     useEffect(() => {
         (async () => {
-            const res = await ServiceObj.getAllProducts()
+            const res = await ServiceObj.adminGetAllProducts()
             setProducts(res.data.data)
             console.log(res.data.data)
         })()

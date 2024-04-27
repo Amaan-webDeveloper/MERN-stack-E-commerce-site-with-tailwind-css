@@ -9,11 +9,13 @@ const Home = () => {
     const [products, setProducts] = useState([])
 
     const [sort, setSort] = useState(false)
-    const [priceRange, setPriceRange] = useState(500000)
+    const [priceRange, setPriceRange] = useState(10000000)
     const [sCategory, setSCategory] = useState("")
     const [categoryArray, setCategoryArray] = useState([])
     const [searchQ, setSearchQ] = useState("")
     const [page, setPage] = useState(1)
+
+    const [totalPage, settotalPage] = useState("")
 
     const authStatus = useSelector(state => state.auth.status)
 
@@ -26,12 +28,13 @@ const Home = () => {
     }, [])
     useEffect(() => {
         (async () => {
-            const res = await ServiceObj.getAllProducts({page,searchQ,sort,priceRange,sCategory})
-            console.log(res)
+            const res = await ServiceObj.getAllProducts({ page, searchQ, sort, priceRange, sCategory })
+            console.log(res.data.totalPages)
+            settotalPage(res.data.totalPages)
             setProducts(res.data.data)
         })()
-    }, [sort,priceRange,sCategory,searchQ])
-    
+    }, [sort, priceRange, sCategory, searchQ,page])
+
 
 
 
@@ -72,7 +75,14 @@ const Home = () => {
                     {products.map((product) => {
                         return <ProductCard key={product._id} product={product} />
                     })}
+
+                    <div className='flex items-center justify-center'>
+                        <button onClick={()=>{page > 1?setPage(page - 1) : null}}><img src={"/svg/left.svg"} alt="" /></button>
+                        {page}
+                        <button onClick={()=>{page < totalPage?setPage(page + 1) : null}}><img src={"/svg/right.svg"} alt="" /></button>
+                    </div>
                 </ProductContainer>
+
 
             </div>
         </div>

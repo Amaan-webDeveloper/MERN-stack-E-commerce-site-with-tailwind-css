@@ -33,11 +33,31 @@ export class Service {
             console.log(error)
         }
     }
+    async adminGetAllProducts(){
+        try {
+            const res = await axios.post(`/api/v1/product/admin/adminGetAllProduct`)
+            return res;
+        } catch (error) {
+            if (error) {
+                throw error
+            }
+            console.log(error)
+        }
+    }
 
 
     async getProduct(id){
         try {
             const res = await axios.post(`/api/v1/product/getproduct/${id}`)
+
+            return res
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async getProductsArray(idsArray){
+        try {
+            const res = await axios.post(`/api/v1/product/getproductsarray`,idsArray)
 
             return res
         } catch (error) {
@@ -91,6 +111,40 @@ export class Service {
     async getAllCategories(){
         try {
             const res = await axios.post("/api/v1/category/getallcategoies")
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async newOrder({productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total}){
+        try {
+            const res = await axios.post("/api/v1/order/new-order",{productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total})
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async getUserOrders(){
+        try {
+            const res = await axios.post("/api/v1/order/getuserorders")
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async addToCart(id){
+        try {
+            const res = await axios.post(`/api/v1/order/addtocart/${id}`)
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async removeFromCart(id){
+        try {
+            const res = await axios.post(`/api/v1/order/removefromcart/${id}`)
             return res;
         } catch (error) {
             console.log(error)

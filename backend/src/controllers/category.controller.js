@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import {Category} from "../models/category.model.js"
 import ApiResponse from "../utils/ApiResponse.js"
 import { ApiError } from "../utils/ApiError.js"
+import { cache } from "../../app.js"
 
 
 
@@ -19,7 +20,13 @@ const createCategory = asyncHandler(async (req, res) => {
 })
 
 const getAllCategories = asyncHandler(async (req,res)=>{
-    const categories = await Category.find()
+    let categories;
+    if (cache.has("categories")) {
+        categories = JSON.parse(cache.get("categories"))
+    }else{
+        categories = await Category.find()
+        cache.set("categories",JSON.stringify(categories))
+    }
 
     if (!categories) {
 

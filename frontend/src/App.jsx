@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Account, AdminDash, AuthLayout, Cart, CreateProducts, DetailedProductCard, Home, Login, ManageProducts, NavBar, Orders, Register, UpdateProduct,CreateCategory } from './components'
 import "./App.css";
+import NewOrder from './components/pages/NewOrder';
 
 
 const App = () => {
@@ -13,7 +14,8 @@ const App = () => {
 
         <Route element={<NavBar />}>
           <Route path='/orders' element={<Orders />} />
-          <Route path='/cart' element={<Cart />} />
+          <Route path='/new-order' element={<NewOrder />} />
+          <Route path='/cart' element={<AuthLayout><Cart /></AuthLayout>} />
 
           <Route path='/admin/dash/' element={<AuthLayout><AdminDash /></AuthLayout>}>
 
