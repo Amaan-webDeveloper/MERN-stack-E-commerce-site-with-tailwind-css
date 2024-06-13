@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams,useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import ServiceObj from '../../Api/backendConfig'
 import ImageSlider from "./ImageSlider"
 import { useSelector } from 'react-redux'
@@ -11,51 +11,107 @@ const DetailedProductCard = () => {
   const userData = useSelector(state => state.auth.userData)
   const navigate = useNavigate();
 
+  const [isOutOfStock, setIsOutOfStock] = useState(false)
+
+  const [quantity, setQuantity] = useState(1)
+
   const [isAddedToCart, setisAddedToCart] = useState(false)
-  
+
   // console.log(userData)
-  
-  
+
+
   useEffect(() => {
     (async () => {
       const res = await ServiceObj.getProduct(id)
-      setProduct(res.data.data)
+      if (res) {
+        setProduct(res.data.data)
+      }
+      if (res.data.data.stock <= 0) {
+        
+        setIsOutOfStock(true)
+        setQuantity(0)
+        return
+      }
     })()
   }, [id])
 
- 
+
   
 
-  const handleAddToCart = async(e)=>{
+
+
+
+  const handleAddToCart = async () => {
+    // if (isOutOfStock) {
+    //   return
+    // }
     if (!authStatus) {
       return navigate("/login")
     }
 
     if (userData?.cart.includes(id)) {
-      console.log(id,'already')
+      console.log(id, 'already')
+      // 
       return;
     }
 
-    const res = await ServiceObj.addToCart(id)
+    const res = await ServiceObj.addToCart({ id, quantity })
     if (res) {
       console.log(res)
-      
+
     }
     setisAddedToCart(true)
   }
 
+  const handleincreaseInQuantity = () => {
+
+    if (isOutOfStock) {
+      return
+    }
+    
+    if (product.stock <= 0) {
+      setQuantity(0)
+      return
+    }
+    if (product.stock <= quantity) return
+    if (quantity >= 5) return
+
+    
+
+    setQuantity(quantity + 1)
+
+
+  }
+  const handledecreaseInQuantity = () => {
+
+    if (product.stock <= 0) {
+      setQuantity(0)
+      return
+    }
+    // if (product.stock <= quantity) return
+    // if (product.stock <= 5) return
+
+    if (quantity <= 1) {
+      return
+    }
+
+    setQuantity(quantity - 1)
+
+
+  }
+
   useEffect(() => {
-    (async()=>{
+    (async () => {
       if (userData?.cart.includes(id)) {
         setisAddedToCart(true)
         console.log(isAddedToCart)
       }
     })()
-  }, [userData,handleAddToCart])
-  
+  }, [userData, handleAddToCart])
+
 
   return (
-    <div className='pt-16 h-screen w-screen lg:flex'>
+    <div className='h-screen w-screen lg:flex'>
       <div className='lg:w-1/2 my-auto w-screen'>
         <ImageSlider imagesArray={product.productImages} />
       </div>
@@ -76,21 +132,22 @@ const DetailedProductCard = () => {
           <p>{product.description}</p>
         </div>
 
-        {/* <div className='mt-6'>
+        <div className='mt-6'>
           <div>Quantity</div>
           <div className='flex gap-1'>
 
-            <button type='button' onClick={()=>{setQuantity(quantity - 1)}} className='px-2 text-center border-2 text-lg border-black'>-</button>
+            <button type='button' onClick={() => { handledecreaseInQuantity() }} className='px-2 text-center border-2 text-lg border-black'>-</button>
             <div className='text-center px-2 border-2 border-black'>{quantity}</div>
-            <button type='button' onClick={()=>{setQuantity(quantity + 1)}} className='text-center px-2 border-2 text-lg border-black'>+</button>
+            <button type='button' onClick={() => { handleincreaseInQuantity() }} className='text-center px-2 border-2 text-lg border-black'>+</button>
           </div>
-        </div> */}
+          {isOutOfStock && <p className='text-red-500'>out of stock</p>}
+        </div>
 
         <div className='mt-6 flex-cal flex gap-2 my-16'>
 
-          {!isAddedToCart?<button onClick={(e=>{handleAddToCart(e)})} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>ADD TO CART</button>:<button onClick={e=>{navigate("/cart")}} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>GO TO CART</button>}
+          {!isAddedToCart ? <button onClick={(e => { handleAddToCart(e) })} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>ADD TO CART</button> : <button onClick={() => { navigate("/cart") }} className='hover:bg-black hover:text-white border-2 px-2 py-2 text-lg rounded-lg border-black'>GO TO CART</button>}
 
-          <button className='border-2 text-white bg-black px-2 py-2 text-lg border-black rounded-lg'>BUY IT NOW</button>
+          {/* <button className='border-2 text-white bg-black px-2 py-2 text-lg border-black rounded-lg'>BUY IT NOW</button> */}
         </div>
 
 

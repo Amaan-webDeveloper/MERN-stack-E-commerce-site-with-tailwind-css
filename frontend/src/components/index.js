@@ -1,7 +1,7 @@
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Home from "./pages/Home.jsx";
-import NavBar from "./utils/NavBar.jsx";
+import Header from "./header/Header.jsx";
 import LogoutBtn from "./auth/LogoutBtn";
 import ImageSlider from "./utils/ImageSlider.jsx";
 import Container from "./container/Container.jsx";
@@ -17,6 +17,7 @@ import DetailedProductCard from "./utils/DetailedProductCard.jsx"
 import ProductCard from "./utils/ProductCard.jsx"
 import UpdateProduct from "./admin/UpdateProduct.jsx";
 import CreateCategory from "./admin/CreateCategory.jsx";
+import LayoutContainer from "./container/LayoutContainer.jsx";
 // import AuthLayout from "./auth/AuthLayout";
 
-export {Login,Register,Home,NavBar,LogoutBtn,ImageSlider, Orders,Account,Cart,Container,AdminDash,CreateProducts,ManageProducts,UserOreders,AuthLayout,DetailedProductCard,ProductCard,UpdateProduct,CreateCategory}
+export {Login,Register,Home,LogoutBtn,ImageSlider, Orders,Account,Cart,Container,AdminDash,CreateProducts,ManageProducts,UserOreders,AuthLayout,DetailedProductCard,ProductCard,UpdateProduct,CreateCategory,LayoutContainer,Header}

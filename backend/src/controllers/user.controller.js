@@ -23,10 +23,10 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { fullName, userName, password, email } = req.body
+    const { userName, password, email } = req.body
 
     if (
-        [fullName, userName, password, email].some((field) => field?.trim() === "" || undefined)
+        [userName, password, email].some((field) => field?.trim() === "" || undefined)
     ) {
         throw new ApiError(404,"All fieds are requiered")
     }
@@ -38,7 +38,6 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     const newUser = await User.create({
-        fullName,
         userName,
         email,
         password
@@ -137,7 +136,6 @@ const refreshAccessToken = asyncHandler(async(req,res,next)=>{
 
     try {
         const decodedToken = await jwt.verify(oldRefreshToken,process.env.REFRESH_TOKEN_SECRET)
-    
         const userExists = await User.findById(decodedToken)
         if (!userExists) {
             throw new ApiError(401,"invalid token")

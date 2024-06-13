@@ -71,9 +71,9 @@ const getAllProduct = asyncHandler(async (req, res) => {
     const { searchQ, sort, priceRange, sCategory } = req.query;
 
     const page = Number(req.query?.page) || 1;
-    const limit = 3;
+    const limit = 5;
     const skip = (page - 1) * limit;
-    // console.log(req.query)
+    console.log(req.query)
 
     const categoryName = await Category.findOne({ name: sCategory })
     // console.log(categoryName?._id)
@@ -154,36 +154,51 @@ const getProduct = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, product, "Product fatched successfully"))
 
 })
-const getProductsArray = asyncHandler(async (req, res) => {
+// const getProductsArray = asyncHandler(async (req, res) => {
 
 
-    const { idsArray } = req.body;
-    console.log(idsArray)
+//     const { idsArray } = req.body;
 
-    if (!idsArray) {
-        throw new ApiError(401, "product id not found")
-    }
-    let products;
-    // if (cache.has(`product-${id}`)) {
-    //     product = JSON.parse(cache.get(`product-${id}`))
-    // }else{
+//     const id = idsArray.map((e)=>(
+//         e.productId
+//     ))
 
-    // const quary = idsArray.map((id)=>(
-    //     {_id:id}
-    // ))
-    // console.log(quary)
-    products = await Product.find({_id:{$in:idsArray}})
+//     const o_quantity = idsArray.map((e)=>(
+//         e.quantity
+//     ))
 
-    if (!products) {
-        throw new ApiError(501, "faild to fatch the product")
-    }
-    // cache.set(`product-${id}`,JSON.stringify(products))
-    // }
+//     console.log(o_quantity)
+
+//     // console.log(id)
+
+//     if (!idsArray) {
+//         throw new ApiError(401, "product id not found")
+//     }
+//     let products;
+//     // if (cache.has(`product-${id}`)) {
+//     //     product = JSON.parse(cache.get(`product-${id}`))
+//     // }else{
+
+//     // const quary = idsArray.map((id)=>(
+//     //     {_id:id}
+//     // ))
+//     // console.log(quary)
+//     products = await Product.find({_id:{$in:id}})
+
+//     // const productsWithOrderQuantity = products.map((p)=>{
+//     //     p.orderQuantity = 
+//     // })
+
+//     if (!products) {
+//         throw new ApiError(501, "faild to fatch the product")
+//     }
+//     // cache.set(`product-${id}`,JSON.stringify(products))
+//     // }
     
 
-    return res.status(200).json(new ApiResponse(200, products, "Product fatched successfully"))
+//     return res.status(200).json(new ApiResponse(200, products, "Product fatched successfully"))
 
-})
+// })
 
 
 const updateProduct = asyncHandler(async (req, res) => {
@@ -292,7 +307,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 })
 
 
-export { createProduct, getAllProduct, getProduct, updateProduct, deleteProduct,adminGetAllProduct,getProductsArray };
+export { createProduct, getAllProduct, getProduct, updateProduct, deleteProduct,adminGetAllProduct };
 
 
 // http://localhost:3000/api/v1/product/admin/createproduct

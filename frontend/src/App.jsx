@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Account, AdminDash, AuthLayout, Cart, CreateProducts, DetailedProductCard, Home, Login, ManageProducts, NavBar, Orders, Register, UpdateProduct,CreateCategory } from './components'
+import { Account, AdminDash, AuthLayout, Cart, CreateProducts, DetailedProductCard, Home, Login, ManageProducts, Orders, Register, UpdateProduct, CreateCategory, LayoutContainer } from './components'
 import "./App.css";
 import NewOrder from './components/pages/NewOrder';
 
@@ -8,26 +8,39 @@ import NewOrder from './components/pages/NewOrder';
 const App = () => {
   return (
     <div>
+
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        <Route path='/login' element={<LayoutContainer>
+          <Login /></LayoutContainer>} />
+        <Route path='/register' element={<LayoutContainer>
+          <Register /></LayoutContainer>} />
 
-        <Route element={<NavBar />}>
-          <Route path='/orders' element={<Orders />} />
-          <Route path='/new-order' element={<NewOrder />} />
-          <Route path='/cart' element={<AuthLayout><Cart /></AuthLayout>} />
+        <Route>
+          <Route path='/orders' element={<LayoutContainer><Orders />
+          </LayoutContainer>} />
+          <Route path='/new-order' element={<LayoutContainer><NewOrder /></LayoutContainer>} />
+          <Route path='/cart' element={<AuthLayout><LayoutContainer><Cart /></LayoutContainer></AuthLayout>} />
 
-          <Route path='/admin/dash/' element={<AuthLayout><AdminDash /></AuthLayout>}>
+          <Route path='/admin/dash/' element={<AuthLayout><LayoutContainer><AdminDash /></LayoutContainer></AuthLayout>}>
 
-            <Route path='manage-products' element={<ManageProducts />} />
-            <Route path='createcategory' element={<CreateCategory />} />
-            <Route path='createproduct' element={<CreateProducts />} />
-            <Route path='updateproduct/:id' element={<UpdateProduct />} />
+            <Route path='manage-products' element={
+              <ManageProducts />
+            } />
+            <Route path='createcategory' element={<LayoutContainer><CreateCategory />
+            </LayoutContainer>} />
+            <Route path='createproduct' element={<LayoutContainer>
+              <CreateProducts /></LayoutContainer>} />
+            <Route path='updateproduct/:id' element={<LayoutContainer>
+              <UpdateProduct /></LayoutContainer>} />
           </Route>
 
-          <Route path='/account' element={<AuthLayout authentication={true}><Account /></AuthLayout>} />
-          <Route path='/' element={<AuthLayout authentication={true}><Home /></AuthLayout>} />
-          <Route path='/product/:id' element={<AuthLayout authentication={true}><DetailedProductCard /></AuthLayout>} />
+          <Route path='/account' element={<AuthLayout authentication={true}><LayoutContainer><Account /></LayoutContainer></AuthLayout>} />
+          <Route path='/' element={
+            <LayoutContainer>
+              <AuthLayout authentication={true}>
+                <Home />
+              </AuthLayout></LayoutContainer>} />
+          <Route path='/product/:id' element={<AuthLayout authentication={true}><LayoutContainer><DetailedProductCard /></LayoutContainer></AuthLayout>} />
         </Route>
 
 

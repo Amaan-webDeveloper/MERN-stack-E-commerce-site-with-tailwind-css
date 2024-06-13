@@ -2,6 +2,18 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const orderItemSchema = new mongoose.Schema({
+    productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+    },
+
+    quantity: {
+        type: Number,
+        require: true,
+    },
+});
+
 const userSchema = new mongoose.Schema(
     {
         userName: {
@@ -10,11 +22,11 @@ const userSchema = new mongoose.Schema(
             unique: true,
             trim: true,
         },
-        fullName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
+        // fullName: {
+        //     type: String,
+        //     required: true,
+        //     trim: true,
+        // },
         email: {
             type: String,
             required: true,
@@ -36,11 +48,9 @@ const userSchema = new mongoose.Schema(
                 ref: "Product"
             }
         ],
-        cart: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product"
-        }
-        ],
+        cart: {
+            type: [orderItemSchema],
+        },
         refreshToken: {
             type: String
         },

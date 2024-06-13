@@ -1,26 +1,28 @@
-import axios from 'axios'
-import React from 'react'
+
 import { useDispatch } from 'react-redux'
 import { logout as authLogOut } from '../../features/authSlice'
+import { toast } from 'react-toastify'
+import authService from '../../Api/backendAuth'
 
-const LogoutBtn = () => {
+const LogoutBtn = ({...props}) => {
     const dispatch = useDispatch()
 
 
     const logoutHandler = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post("/api/v1/users/logout")
+            const res = await authService.logoutUser()
             if (res) {
+                toast.info("User logout")
                 return dispatch(authLogOut())
             }
-            console.log(res)
+            
         } catch (error) {
             console.log(error)
         }
     }
     return (
-        <button onClick={(e) => { logoutHandler(e) }}>Logout</button>
+        <button className={{...props}} onClick={(e) => { logoutHandler(e) }}>Logout</button>
     )
 }
 

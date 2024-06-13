@@ -1,7 +1,11 @@
+import { Outlet } from "react-router-dom"
 
 
 const ProductContainer = ({children}) => {
-  return <div className="pt-16 flex flex-wrap max-w-7xl w-screen justify-center gap-8">{children}</div>
+  
+  return <div className="flex flex-wrap justify-center gap-8 w-full border-t-2 border-gray-300 relative px-4 pt-5">
+    
+    {children}</div>
   
 }
 

@@ -12,11 +12,11 @@ const newOrder = asyncHandler(async (req, res) => {
     if (!currentUserid) {
         throw new ApiError(400, "User is not loggedIn")
     }
-    const { productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total } = req.body;
+    const { productIdandQuantity, subTotal, phoneNo, address, pinCode, charges, discount, total } = req.body;
     // console.log(productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total)
 
     if (!productIdandQuantity) {
-        throw new ApiError(404, "All fieds are requiered") 
+        throw new ApiError(404, "All fieds are requiered")
     }
     if (
         [subTotal, phoneNo, address, pinCode, charges, discount, total].some((field) => field === "" || undefined)
@@ -62,27 +62,51 @@ const newOrder = asyncHandler(async (req, res) => {
 
 const addToCart = asyncHandler(async (req, res) => {
     const currentUserid = req.user?._id;
+    const { productId, quantity } = req.query;
+
+
     if (!currentUserid) {
         throw new ApiError(400, "User is not loggedIn")
     }
-    const { id } = req.params;
-    console.log(id)
-    if (!id) {
+
+    if (!productId) {
+        throw new ApiError(404, "All fieds are requiered")
+    }
+    if (!quantity) {
         throw new ApiError(404, "All fieds are requiered")
     }
 
 
 
-    const user = await User.findByIdAndUpdate(currentUserid,
-        {
-            $push: {
-                cart: id
-            }
-        }, { new: true })
+    const user = await User.findById(currentUserid);
 
     if (!user) {
         throw new ApiError(500, "something went wrong while adding the product to cart")
     }
+    // const { id,quantity } = req.params;
+
+    // console.log( id,quantity )
+
+
+    const itemIndex = req.user.cart.findIndex(item => item.productId.toString() === productId)
+
+    if (itemIndex > -1) {
+        user.cart[itemIndex].quantity += quantity
+    } else {
+        user.cart.push({ productId, quantity })
+    }
+
+    await user.save()
+
+
+    // const user = await User.findByIdAndUpdate(currentUserid,
+    //     {
+    //         $push: {
+    //             cart: {productId:id,quantity}
+    //         }
+    //     }, { new: true })
+
+
 
 
     // await cacheInvalidate({product:true,order:true,admin:true})
@@ -92,29 +116,42 @@ const addToCart = asyncHandler(async (req, res) => {
 })
 const removeFromCart = asyncHandler(async (req, res) => {
     const currentUserid = req.user?._id;
+    const { id } = req.params;
+
     if (!currentUserid) {
         throw new ApiError(400, "User is not loggedIn")
     }
-    const { id } = req.params;
-    console.log(id)
+
     if (!id) {
         throw new ApiError(404, "All fieds are requiered")
     }
 
-    // { $in: [id] }
 
-    const user = await User.findByIdAndUpdate(currentUserid,
-        {
-            $pull: {
-                cart: id
-            }
-        }, { new: true })
-
-        console.log(user)
+    const user = await User.findById(currentUserid);
 
     if (!user) {
         throw new ApiError(500, "something went wrong while adding the product to cart")
     }
+
+
+    user.cart = user.cart.filter(item => item._id.toString() !== id.toString())
+    // console.log(user.cart)
+    await user.save();
+
+    // const { id,quantity } = req.params;
+
+    // console.log( id,quantity )
+
+    // const user = await User.findByIdAndUpdate(currentUserid,
+    //     {
+    //         $pull: {
+    //             cart: {productId:id}
+    //         }
+    //     }, { new: true })
+
+    // console.log(user)
+
+
 
 
     // await cacheInvalidate({product:true,order:true,admin:true})
@@ -122,15 +159,82 @@ const removeFromCart = asyncHandler(async (req, res) => {
     return res.status(201).json(new ApiResponse(201, user, "product  product is removed from cart successfully"))
 
 })
+
+const updateCartItem = asyncHandler(async (req, res) => {
+    const currentUserid = req.user?._id;
+    const { productId, quantity } = req.query;
+    console.log(productId, quantity)
+
+    if (!currentUserid) {
+        throw new ApiError(400, "User is not loggedIn")
+    }
+
+    if (!productId) {
+        throw new ApiError(404, "All fieds are requiered")
+    }
+    if (!quantity) {
+        throw new ApiError(404, "All fieds are requiered")
+    }
+
+    const user = await User.findById(currentUserid);
+
+    if (!user) {
+        throw new ApiError(500, "something went wrong while adding the product to cart")
+    }
+    // const { id,quantity } = req.params;
+
+    // console.log( id,quantity )
+
+
+    const itemIndex = req.user.cart.findIndex(item => item.productId.toString() === productId)
+
+    if (itemIndex > -1) {
+        user.cart[itemIndex].quantity += Number(quantity)
+        await user.save()
+    } else {
+        throw new ApiError(400, "something went wrong while updating the product in the cart")
+        // user.cart.push({productId,quantity})
+    }
+
+
+
+
+    // const user = await User.findByIdAndUpdate(currentUserid,
+    //     {
+    //         $push: {
+    //             cart: {productId:id,quantity}
+    //         }
+    //     }, { new: true })
+
+
+
+
+    // await cacheInvalidate({product:true,order:true,admin:true})
+
+    return res.status(201).json(new ApiResponse(201, user, "product updated to cart successfully"))
+
+})
+
+const populatedCartItems = asyncHandler(async (req, res) => {
+    if (!req.populatedUser) {
+        throw new ApiError(501, "populated user is not found")
+    }
+    // await cacheInvalidate({product:true,order:true,admin:true})
+
+    return res.status(201).json(new ApiResponse(201, req.populatedUser, "product poplated successfully"))
+})
+
+
+
 const getUserOrders = asyncHandler(async (req, res) => {
     const currentUserid = req.user?._id;
     if (!currentUserid) {
         throw new ApiError(400, "User is not loggedIn")
     }
 
-    const orders = await Order.find({customer:{$in:currentUserid}})
+    const orders = await Order.find({ customer: { $in: currentUserid } })
 
-        console.log(orders)
+    console.log(orders)
 
     if (!orders) {
         throw new ApiError(500, "something went wrong while adding the product to cart")
@@ -145,4 +249,4 @@ const getUserOrders = asyncHandler(async (req, res) => {
 
 
 
-export { newOrder, addToCart, removeFromCart,getUserOrders }
+export { newOrder, addToCart, removeFromCart, getUserOrders, updateCartItem, populatedCartItems }

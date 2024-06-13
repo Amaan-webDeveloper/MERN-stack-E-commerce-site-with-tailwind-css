@@ -31,6 +31,17 @@ export class AuthService {
             console.log(error)
         }
     }
+    async logoutUser() {
+        try {
+            const res = await axios.post("/api/v1/users/logout")
+            return res;
+        } catch (error) {
+            if (error) {
+                throw error
+            }
+            console.log(error)
+        }
+    }
 
     async getCurrentUser() {
         try {

@@ -117,6 +117,8 @@ export class Service {
         }
     }
 
+    // 
+
     async newOrder({productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total}){
         try {
             const res = await axios.post("/api/v1/order/new-order",{productIdandQuantity,subTotal, phoneNo, address, pinCode, charges, discount, total})
@@ -134,9 +136,10 @@ export class Service {
         }
     }
 
-    async addToCart(id){
+    async addToCart({id,quantity}){
+        // console.log(productId,quantity)
         try {
-            const res = await axios.post(`/api/v1/order/addtocart/${id}`)
+            const res = await axios.post(`/api/v1/order/addtocart?productId=${id}&quantity=${quantity}`)
             return res;
         } catch (error) {
             console.log(error)
@@ -145,6 +148,22 @@ export class Service {
     async removeFromCart(id){
         try {
             const res = await axios.post(`/api/v1/order/removefromcart/${id}`)
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async populateUserCart(){
+        try {
+            const res = await axios.post(`/api/v1/order/populate-user-cart`)
+            return res;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async updateUserCart({id,quantity}){
+        try {
+            const res = await axios.post(`/api/v1/order/update-cart-items?productId=${id}&quantity=${quantity}`)
             return res;
         } catch (error) {
             console.log(error)
